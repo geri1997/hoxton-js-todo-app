@@ -18,7 +18,7 @@ const state = [
 function createToDoItem(obj){
     //Create <li>
     const todoLiEL = document.createElement('li')
-    todoLiEL.setAttribute('class','todo')
+    obj.completed?todoLiEL.setAttribute('class','todo completed'):todoLiEL.setAttribute('class','todo')
     //Create div
     const todoDivCompletedCheckbox = document.createElement('div')
     todoDivCompletedCheckbox.setAttribute('class','completed-section')
@@ -26,9 +26,8 @@ function createToDoItem(obj){
     const isCompletedCheckboxEl = document.createElement('input')
     isCompletedCheckboxEl.setAttribute('type','checkbox')
     isCompletedCheckboxEl.setAttribute('class','completed-checkbox')
-    // if(obj.completed === true){
-    //     isCompletedCheckboxEl.setAttribute('checked','')
-    // }
+    //If todo is completed, make the checkbox checked
+    if(obj.completed)isCompletedCheckboxEl.checked=true
     //Create Text section div
     const textSectionDiv = document.createElement('div')
     textSectionDiv.setAttribute('class','text-section')
@@ -48,11 +47,19 @@ function createToDoItem(obj){
     deleteButtonEl.setAttribute('class','delete')
     deleteButtonEl.textContent = 'Delete'
     //Append Stuff
-    document.querySelector('ul.todo-list').append(todoLiEL)
-    todoLiEL.append(todoDivCompletedCheckbox,textSectionDiv,buttonSectionDivEl)
-    todoDivCompletedCheckbox.append(isCompletedCheckboxEl)
-    textSectionDiv.append(paragraphElThatContainsTodo)
-    buttonSectionDivEl.append(editButtonEl,deleteButtonEl)
+    if(!obj.completed){
+        document.querySelector('ul.todo-list').append(todoLiEL)
+        todoLiEL.append(todoDivCompletedCheckbox,textSectionDiv,buttonSectionDivEl)
+        todoDivCompletedCheckbox.append(isCompletedCheckboxEl)
+        textSectionDiv.append(paragraphElThatContainsTodo)
+        buttonSectionDivEl.append(editButtonEl,deleteButtonEl)
+    }else{
+        document.querySelector('ul.completed-list').append(todoLiEL)
+        todoLiEL.append(todoDivCompletedCheckbox,textSectionDiv,buttonSectionDivEl)
+        todoDivCompletedCheckbox.append(isCompletedCheckboxEl)
+        textSectionDiv.append(paragraphElThatContainsTodo)
+        buttonSectionDivEl.append(editButtonEl,deleteButtonEl)
+    }
     //Call the function that hides or shows completed list
     hideShowCompletedSection()
     //Check if task is completed or not
@@ -138,7 +145,7 @@ function render(){
     document.querySelector('ul.completed-list').innerHTML=''
 
     for(const todo of state){
-        todo.completed?createCompleted(todo):createToDoItem(todo)
+        createToDoItem(todo)
     }
     
 }

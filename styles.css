@@ -2,15 +2,14 @@ body {
     margin: 0;
     font-family: sans-serif;
   
-    height: 100vh;
   
     display: grid;
-    place-items: center;
+    justify-items: center;
   }
   
   main {
     width: 18rem;
-  
+    margin-top: 7rem;
     border: solid 1px #00000020;
     border-radius: 5px;
     padding: 0.9rem 1.8rem;
