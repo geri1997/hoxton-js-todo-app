@@ -1,5 +1,5 @@
 const state = {
-    todos:[
+    todos:[    
     {
         name:'Go Shopping',
         completed:true
@@ -11,7 +11,8 @@ const state = {
     {
         name:'Get a haircut',
         completed:false
-    }],
+    }
+    ],
     showCompleted : true
 }
 
@@ -29,7 +30,7 @@ function createToDoItem(obj){
     isCompletedCheckboxEl.setAttribute('type','checkbox')
     isCompletedCheckboxEl.setAttribute('class','completed-checkbox')
     //If todo is completed, make the checkbox checked
-    if(obj.completed)isCompletedCheckboxEl.checked=true
+    isCompletedCheckboxEl.checked=obj.completed
     //Create Text section div
     const textSectionDiv = document.createElement('div')
     textSectionDiv.setAttribute('class','text-section')
@@ -37,6 +38,12 @@ function createToDoItem(obj){
     const paragraphElThatContainsTodo = document.createElement('p')
     paragraphElThatContainsTodo.setAttribute('class','text')
     paragraphElThatContainsTodo.textContent= obj.name
+    
+    //Div with tooltip
+    const divTooltipEl = document.createElement('div')
+    divTooltipEl.setAttribute('class','tooltip')
+    divTooltipEl.textContent = 'Press Enter to save!'
+    
     //Create div for buttons
     const buttonSectionDivEl = document.createElement('div')
     buttonSectionDivEl.setAttribute('class','button-section')
@@ -72,9 +79,17 @@ function createToDoItem(obj){
    //Edit Todo
     function editTodoName(){
     //Create Input Button for Edit
-    const editInputEl = document.createElement('input')
+        function displayTooltip(){
+            paragraphElThatContainsTodo.append(divTooltipEl)
+        }
+        function hideTooltip(){
+            divTooltipEl.remove()
+        }
+        const editInputEl = document.createElement('input')
+        editInputEl.onfocus=displayTooltip
+        editInputEl.onblur =hideTooltip
     //Displays input box instead of text when click on edit button
-    editButtonEl.addEventListener('click',(e)=>{
+        editButtonEl.addEventListener('click',(e)=>{
         // obj.name = paragraphElThatContainsTodo.textContent = prompt('Enter new title for todo')
         //  obj.name=paragraphElThatContainsTodo.textContent
         //render()
@@ -131,13 +146,14 @@ function hideShowCompletedSection(){
 function addNewTask(){
     formEl.addEventListener('submit',(e)=>{
         e.preventDefault();
-        state.todos.push({
+        const newTask = {
             name:document.querySelector('input[type="text"]').value,
             completed:false
                     }
-            )
+        state.todos.push(newTask)
             formEl.reset()
-            render()
+
+            createToDoItem(newTask)
         }
     )
 }
