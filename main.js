@@ -1,4 +1,4 @@
-const state = [
+let state = [
     {
         name:'Go Shopping',
         completed:true
@@ -60,7 +60,7 @@ function createToDoItem(obj){
     //Call the function that hides or shows completed list
     
     hideShowCompletedSection()
-    //Check if task is completed or not
+    //Toggle task complete or incomplete
     function toggleCompleteOrIncomplete(){
         isCompletedCheckboxEl.addEventListener('click',(e)=>{
             obj.completed=!obj.completed
@@ -69,7 +69,7 @@ function createToDoItem(obj){
     }
     toggleCompleteOrIncomplete()
 
-   
+   //Edit Todo
     function editTodoName(){
     //Create Input Button for Edit
     const editInputEl = document.createElement('input')
@@ -92,11 +92,18 @@ function createToDoItem(obj){
         })
     }
     editTodoName()
-
+    
+    deleteButtonEl.addEventListener('click',(e)=>{
+       deleteItem(obj.name,todoLiEL)
+})
 
 }
-
-
+function deleteItem(text,item){
+    state = state.filter((todo)=>{
+        return todo.name !== text
+    })
+    item.remove()
+}
 
 function hideShowCompletedSection(){
     //Find the show completed input
