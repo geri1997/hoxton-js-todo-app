@@ -69,6 +69,30 @@ function createToDoItem(obj){
     }
     toggleCompleteOrIncomplete()
 
+   
+    function editTodoName(){
+    //Create Input Button for Edit
+    const editInputEl = document.createElement('input')
+    //Displays input box instead of text when click on edit button
+    editButtonEl.addEventListener('click',(e)=>{
+        // obj.name = paragraphElThatContainsTodo.textContent = prompt('Enter new title for todo')
+        //  obj.name=paragraphElThatContainsTodo.textContent
+        //render()
+        editInputEl.value = obj.name
+        paragraphElThatContainsTodo.textContent = ''
+        paragraphElThatContainsTodo.append(editInputEl)
+        editInputEl.focus()
+    })
+    //Displays text with the value contained in the input box instead of input box as soon as 'Enter' is pressed.
+        editInputEl.addEventListener('keydown', (e)=>{
+            if(e.key==='Enter'){
+                obj.name = editInputEl.value
+                paragraphElThatContainsTodo.textContent = obj.name
+            }
+        })
+    }
+    editTodoName()
+
 
 }
 
@@ -107,6 +131,8 @@ function addNewTask(){
     )
 }
 
+
+
 function render(){
     document.querySelector('ul.todo-list').innerHTML=''
     document.querySelector('ul.completed-list').innerHTML=''
@@ -116,6 +142,5 @@ function render(){
     }
     
 }
-
 render()
 addNewTask()
