@@ -2,9 +2,11 @@ body {
     margin: 0;
     font-family: sans-serif;
   
-  
+    /* height: 100vh; */
+
     display: grid;
     justify-items: center;
+    /* place-items: center; */
   }
   
   main {

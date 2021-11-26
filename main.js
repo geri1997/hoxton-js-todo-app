@@ -13,7 +13,7 @@ const state = [
     }
 ]
 
-
+const formEl = document.querySelector('form')
 
 function createToDoItem(obj){
     //Create <li>
@@ -61,13 +61,13 @@ function createToDoItem(obj){
     
     hideShowCompletedSection()
     //Check if task is completed or not
-    function isCompletedOrNot(){
+    function toggleCompleteOrIncomplete(){
         isCompletedCheckboxEl.addEventListener('click',(e)=>{
             obj.completed=!obj.completed
             render()
         })
     }
-    isCompletedOrNot()
+    toggleCompleteOrIncomplete()
 
 
 }
@@ -83,58 +83,29 @@ function hideShowCompletedSection(){
     showHideCompletedInputEl.addEventListener('click',function(e){
         if(!showHideCompletedInputEl.checked){
             completedSection.style.display= 'none'
+            // render()
         }else{
             completedSection.style.display= 'block'
+            // render()
         }
     })
 }
 
 
-// function createCompleted(obj){
-//     //Create <li>
-//     const todoLiEL = document.createElement('li')
-//     todoLiEL.setAttribute('class','todo completed')
-//     //Create div
-//     const todoDivCompletedCheckbox = document.createElement('div')
-//     todoDivCompletedCheckbox.setAttribute('class','completed-section')
-//     //Create checkbox to toggle completed
-//     const isCompletedCheckboxEl = document.createElement('input')
-//     isCompletedCheckboxEl.setAttribute('type','checkbox')
-//     isCompletedCheckboxEl.setAttribute('class','completed-checkbox')
-//     isCompletedCheckboxEl.setAttribute('checked','')
-//     //Create Text section div
-//     const textSectionDiv = document.createElement('div')
-//     textSectionDiv.setAttribute('class','text-section')
-//     //Create paragraph that contains todo text
-//     const paragraphElThatContainsTodo = document.createElement('p')
-//     paragraphElThatContainsTodo.setAttribute('class','text')
-//     paragraphElThatContainsTodo.textContent= obj.name
-//     //Create div for buttons
-//     const buttonSectionDivEl = document.createElement('div')
-//     buttonSectionDivEl.setAttribute('class','button-section')
-//     //Create Edit Button
-//     const editButtonEl = document.createElement('button')
-//     editButtonEl.setAttribute('class','edit')
-//     editButtonEl.textContent = 'Edit'
-//     //Create Delete Button
-//     const deleteButtonEl = document.createElement('button')
-//     deleteButtonEl.setAttribute('class','delete')
-//     deleteButtonEl.textContent = 'Delete'
-//     //Append Stuff
-//     document.querySelector('ul.completed-list').append(todoLiEL)
-//     todoLiEL.append(todoDivCompletedCheckbox,textSectionDiv,buttonSectionDivEl)
-//     todoDivCompletedCheckbox.append(isCompletedCheckboxEl)
-//     textSectionDiv.append(paragraphElThatContainsTodo)
-//     buttonSectionDivEl.append(editButtonEl,deleteButtonEl)
-//     //Check if task is completed or not
-//     // isCompletedOrNot()
-//     isCompletedCheckboxEl.addEventListener('click',(e)=>{
-//         isCompletedCheckboxEl.checked?obj.completed=true:obj.completed=false
-//         render()
-//     })  
-// }
 
-
+function addNewTask(){
+    formEl.addEventListener('submit',(e)=>{
+        e.preventDefault();
+        state.push({
+            name:document.querySelector('input[type="text"]').value,
+            completed:false
+                    }
+            )
+            formEl.reset()
+            render()
+        }
+    )
+}
 
 function render(){
     document.querySelector('ul.todo-list').innerHTML=''
@@ -147,4 +118,4 @@ function render(){
 }
 
 render()
-
+addNewTask()
