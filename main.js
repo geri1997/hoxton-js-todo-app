@@ -71,7 +71,9 @@ function createToDoItem(obj){
     function toggleCompleteOrIncomplete(){
         isCompletedCheckboxEl.addEventListener('click',(e)=>{
             obj.completed=!obj.completed
-            render()
+            todoLiEL.remove()
+            createToDoItem(obj)
+            // render()
         })
     }
     toggleCompleteOrIncomplete()
