@@ -1,4 +1,5 @@
-let state = [
+const state = {
+    todos:[
     {
         name:'Go Shopping',
         completed:true
@@ -10,8 +11,9 @@ let state = [
     {
         name:'Get a haircut',
         completed:false
-    }
-]
+    }],
+    showCompleted : true
+}
 
 const formEl = document.querySelector('form')
 
@@ -57,9 +59,7 @@ function createToDoItem(obj){
         todoDivCompletedCheckbox.append(isCompletedCheckboxEl)
         textSectionDiv.append(paragraphElThatContainsTodo)
         buttonSectionDivEl.append(editButtonEl,deleteButtonEl)
-    //Call the function that hides or shows completed list
-    
-    hideShowCompletedSection()
+
     //Toggle task complete or incomplete
     function toggleCompleteOrIncomplete(){
         isCompletedCheckboxEl.addEventListener('click',(e)=>{
@@ -99,7 +99,7 @@ function createToDoItem(obj){
 
 }
 function deleteItem(text,item){
-    state = state.filter((todo)=>{
+    state.todos = state.todos.filter((todo)=>{
         return todo.name !== text
     })
     item.remove()
@@ -112,11 +112,15 @@ function hideShowCompletedSection(){
     const completedSection = document.querySelector('section.completed-section')
     //Hide or show completed todos depending on if checked or not
     showHideCompletedInputEl.addEventListener('click',function(e){
-        if(!showHideCompletedInputEl.checked){
+        if(state.showCompleted){
             completedSection.style.display= 'none'
+            state.showCompleted = false
+            showHideCompletedInputEl.checked=false
             // render()
         }else{
+            state.showCompleted = true
             completedSection.style.display= 'block'
+            showHideCompletedInputEl.checked=true
             // render()
         }
     })
@@ -127,7 +131,7 @@ function hideShowCompletedSection(){
 function addNewTask(){
     formEl.addEventListener('submit',(e)=>{
         e.preventDefault();
-        state.push({
+        state.todos.push({
             name:document.querySelector('input[type="text"]').value,
             completed:false
                     }
@@ -144,10 +148,11 @@ function render(){
     document.querySelector('ul.todo-list').innerHTML=''
     document.querySelector('ul.completed-list').innerHTML=''
 
-    for(const todo of state){
+    for(const todo of state.todos){
         createToDoItem(todo)
     }
     
 }
 render()
 addNewTask()
+hideShowCompletedSection()
