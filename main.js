@@ -62,6 +62,15 @@ function createToDoItem(obj){
     const deleteButtonEl = document.createElement('button')
     deleteButtonEl.setAttribute('class','delete')
     deleteButtonEl.textContent = 'Delete'
+    //Create tag section
+    const todoTagSection = document.createElement('p')
+    todoTagSection.setAttribute('class','todo-tags')
+    todoTagSection.style.fontSize= '0.8rem'
+    todoTagSection.textContent = 'Tags: '
+    for(const tag of obj.tags){
+        
+        todoTagSection.textContent += `${tag}\n`
+    }
     //Append Stuff
     if(!obj.completed){
         document.querySelector('ul.todo-list').append(todoLiEL)
@@ -69,7 +78,7 @@ function createToDoItem(obj){
     }else{
         document.querySelector('ul.completed-list').append(todoLiEL)
     }
-    todoLiEL.append(todoDivCompletedCheckbox,textSectionDiv,buttonSectionDivEl)
+    todoLiEL.append(todoDivCompletedCheckbox,textSectionDiv,buttonSectionDivEl,todoTagSection)
         todoDivCompletedCheckbox.append(isCompletedCheckboxEl)
         textSectionDiv.append(paragraphElThatContainsTodo)
         buttonSectionDivEl.append(editButtonEl,deleteButtonEl)
@@ -166,13 +175,17 @@ function addNewTask(){
     formEl.addEventListener('submit',(e)=>{
         e.preventDefault();
         let tagsArray =[] 
-        tagsArray.push(tagInput.value.split(' '))
-        console.log(tagsArray)
+        let splitArray = tagInput.value.split(' ')
+        for(let item of splitArray){
+            tagsArray.push(item)
+        }
+        
         const newTask = {
             name:document.querySelector('input[type="text"]').value,
             completed:false,
             tags:tagsArray
                     }
+                    
         state.todos.push(newTask)
             formEl.reset()
 
@@ -192,7 +205,7 @@ function searchTasks(){
         const filteredArrayBySearch = state.todos.filter(function (todo){
             return todo.name.toLowerCase().includes(searchInput.value.toLowerCase())
         })
-        console.log(filteredArrayBySearch)
+        
         document.querySelector('ul.todo-list').innerHTML=''
         document.querySelector('ul.completed-list').innerHTML=''
         for(let todo of filteredArrayBySearch){

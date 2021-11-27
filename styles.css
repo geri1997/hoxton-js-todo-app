@@ -96,3 +96,7 @@ body {
   div.text-section p.text{
     position: relative;
   }
+
+  p.todo-tags::first-line{
+    font-weight: 900;
+  }
