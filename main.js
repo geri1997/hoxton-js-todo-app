@@ -176,7 +176,7 @@ function addNewTask(){
     const searchInput = document.querySelector('input[type="search"]')
     searchInput.addEventListener('input',(e)=>{
         const filteredArrayBySearch = state.todos.filter(function (todo){
-            return todo.name.includes(searchInput.value)
+            return todo.name.toLowerCase().includes(searchInput.value.toLowerCase())
         })
         console.log(filteredArrayBySearch)
         document.querySelector('ul.todo-list').innerHTML=''
