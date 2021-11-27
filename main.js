@@ -16,6 +16,10 @@ const state = {
     showCompleted : true
 }
 
+document.querySelector('main').addEventListener('click',(e)=>{
+    e.stopPropagation()
+})
+
 const formEl = document.querySelector('form')
 
 function createToDoItem(obj){
@@ -42,7 +46,7 @@ function createToDoItem(obj){
     //Div with tooltip
     const divTooltipEl = document.createElement('div')
     divTooltipEl.setAttribute('class','tooltip')
-    divTooltipEl.textContent = 'Press Enter to save!'
+    divTooltipEl.textContent = 'Press Enter or click anywhere to save changes!'
     
     //Create div for buttons
     const buttonSectionDivEl = document.createElement('div')
@@ -70,6 +74,7 @@ function createToDoItem(obj){
     //Toggle task complete or incomplete
     function toggleCompleteOrIncomplete(){
         isCompletedCheckboxEl.addEventListener('click',(e)=>{
+            e.stopPropagation()
             obj.completed=!obj.completed
             todoLiEL.remove()
             createToDoItem(obj)
@@ -87,21 +92,28 @@ function createToDoItem(obj){
         function hideTooltip(){
             divTooltipEl.remove()
         }
+        function saveEdit(){
+            paragraphElThatContainsTodo.textContent= editInputEl.value
+            hideTooltip()
+        }
         const editInputEl = document.createElement('input')
         editInputEl.onfocus=displayTooltip
-        editInputEl.onblur =hideTooltip
+        editInputEl.onblur =saveEdit
     //Displays input box instead of text when click on edit button
         editButtonEl.addEventListener('click',(e)=>{
         // obj.name = paragraphElThatContainsTodo.textContent = prompt('Enter new title for todo')
         //  obj.name=paragraphElThatContainsTodo.textContent
         //render()
+        e.stopPropagation()
         editInputEl.value = obj.name
         paragraphElThatContainsTodo.textContent = ''
         paragraphElThatContainsTodo.append(editInputEl)
         editInputEl.focus()
     })
+    
     //Displays text with the value contained in the input box instead of input box as soon as 'Enter' is pressed.
         editInputEl.addEventListener('keydown', (e)=>{
+            
             if(e.key==='Enter'){
                 obj.name = editInputEl.value
                 paragraphElThatContainsTodo.textContent = obj.name
@@ -111,6 +123,7 @@ function createToDoItem(obj){
     editTodoName()
     
     deleteButtonEl.addEventListener('click',(e)=>{
+        e.stopPropagation()
        deleteItem(obj.name,todoLiEL)
 })
 
@@ -129,6 +142,7 @@ function hideShowCompletedSection(){
     const completedSection = document.querySelector('section.completed-section')
     //Hide or show completed todos depending on if checked or not
     showHideCompletedInputEl.addEventListener('click',function(e){
+        e.stopPropagation()
         if(state.showCompleted){
             completedSection.style.display= 'none'
             state.showCompleted = false
