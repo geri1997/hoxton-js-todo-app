@@ -43,7 +43,6 @@ body {
   
   form.add-item {
     display: grid;
-    grid-template-columns: 1fr 50px;
   }
   
   form .text-input {

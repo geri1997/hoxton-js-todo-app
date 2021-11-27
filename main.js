@@ -173,6 +173,21 @@ function addNewTask(){
 }
 
 
+    const searchInput = document.querySelector('input[type="search"]')
+    searchInput.addEventListener('input',(e)=>{
+        const filteredArrayBySearch = state.todos.filter(function (todo){
+            return todo.name.includes(searchInput.value)
+        })
+        console.log(filteredArrayBySearch)
+        document.querySelector('ul.todo-list').innerHTML=''
+        document.querySelector('ul.completed-list').innerHTML=''
+        for(let todo of filteredArrayBySearch){
+            console.log(todo)
+            createToDoItem(todo)
+        }
+    })
+
+
 
 function render(){
     document.querySelector('ul.todo-list').innerHTML=''
