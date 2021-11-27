@@ -20,7 +20,7 @@ const state = {
     selectedTags:[]
 }
 
-
+//test
 
 const formEl = document.querySelector('form')
 const tagInput = document.querySelector('input[class="text-input tag"]')
