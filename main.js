@@ -2,23 +2,28 @@ const state = {
     todos:[    
     {
         name:'Go Shopping',
-        completed:true
+        completed:true,
+        tags:['Chores']
     },
     {
         name:'Go to the Doctor',
-        completed:false
+        completed:false,
+        tags:['Health']
     },
     {
-        name:'Get a haircut',
-        completed:false
+        name:'Go for a run',
+        completed:false,
+        tags:['Health','Exercise']
     }
     ],
-    showCompleted : true
+    showCompleted : true,
+    selectedTags:[]
 }
 
 
 
 const formEl = document.querySelector('form')
+const tagInput = document.querySelector('input[class="text-input tag"]')
 
 function createToDoItem(obj){
     //Create <li>
@@ -160,9 +165,13 @@ function hideShowCompletedSection(){
 function addNewTask(){
     formEl.addEventListener('submit',(e)=>{
         e.preventDefault();
+        let tagsArray =[] 
+        tagsArray.push(tagInput.value.split(' '))
+        console.log(tagsArray)
         const newTask = {
             name:document.querySelector('input[type="text"]').value,
-            completed:false
+            completed:false,
+            tags:tagsArray
                     }
         state.todos.push(newTask)
             formEl.reset()
@@ -172,8 +181,13 @@ function addNewTask(){
     )
 }
 
-
+//Filter tasks by search
+function searchTasks(){
     const searchInput = document.querySelector('input[type="search"]')
+    const searchForm = document.querySelector('form.search')
+    searchForm.addEventListener('submit',(e)=>{
+        e.preventDefault()
+    })
     searchInput.addEventListener('input',(e)=>{
         const filteredArrayBySearch = state.todos.filter(function (todo){
             return todo.name.toLowerCase().includes(searchInput.value.toLowerCase())
@@ -182,11 +196,10 @@ function addNewTask(){
         document.querySelector('ul.todo-list').innerHTML=''
         document.querySelector('ul.completed-list').innerHTML=''
         for(let todo of filteredArrayBySearch){
-            console.log(todo)
             createToDoItem(todo)
         }
     })
-
+}
 
 
 function render(){
@@ -201,3 +214,4 @@ function render(){
 render()
 addNewTask()
 hideShowCompletedSection()
+searchTasks()
