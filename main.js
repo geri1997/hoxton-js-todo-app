@@ -16,9 +16,7 @@ const state = {
     showCompleted : true
 }
 
-document.querySelector('main').addEventListener('click',(e)=>{
-    e.stopPropagation()
-})
+
 
 const formEl = document.querySelector('form')
 
@@ -93,7 +91,7 @@ function createToDoItem(obj){
             divTooltipEl.remove()
         }
         function saveEdit(){
-            paragraphElThatContainsTodo.textContent= editInputEl.value
+            obj.name = paragraphElThatContainsTodo.textContent= editInputEl.value
             hideTooltip()
         }
         const editInputEl = document.createElement('input')

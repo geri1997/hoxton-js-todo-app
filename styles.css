@@ -83,6 +83,8 @@ body {
     position: absolute;
     border: 2px solid red;
     top: -1.7rem;
+    left: -9rem;
+    max-width: 6rem;
     background-color: red;
     color: white;
     border-radius: 10px;
