@@ -3,10 +3,13 @@ body {
     font-family: sans-serif;
   
     /* height: 100vh; */
-
-    display: grid;
+ 
+      display: grid;
     justify-items: center;
     /* place-items: center; */
+  }
+  ::-webkit-scrollbar {
+    width: 0px;
   }
   
   main {
