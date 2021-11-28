@@ -226,12 +226,15 @@ function searchTasks(){
         const filteredArrayBySearch = state.todos.filter(function (todo){
             return todo.name.toLowerCase().includes(searchInput.value.toLowerCase())
         })
+        render()
         
         document.querySelector('ul.todo-list').innerHTML=''
         document.querySelector('ul.completed-list').innerHTML=''
+        
         for(let todo of filteredArrayBySearch){
             createToDoItem(todo)
         }
+        // renderTagFilteredTasks()
     })
 }
 
@@ -285,6 +288,7 @@ function createTagCheckboxes(){
 
         document.querySelector('.tag-checkbox-div').append(tag,tagInputCheckbox)
         tagInputCheckbox.addEventListener('click',(e)=>{
+            document.querySelector('input[type="search"]').value = ''
             document.querySelector('ul.todo-list').innerHTML=''
             document.querySelector('ul.completed-list').innerHTML=''
             
