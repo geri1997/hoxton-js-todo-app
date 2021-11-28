@@ -190,6 +190,7 @@ function hideShowCompletedSection(){
 
 function addNewTask(){
     formEl.addEventListener('submit',(e)=>{
+        document.querySelector('input[type="search"]').value = ''
         e.preventDefault();
         let tagsArray =[] 
         let splitArray = tagInput.value.split(' ')
@@ -202,7 +203,8 @@ function addNewTask(){
         const newTask = {
             name:document.querySelector('input[type="text"]').value,
             completed:false,
-            tags:tagsArray
+            tags:tagsArray,
+            user:document.querySelector('input.user').value
                     }
                     
         state.todos.push(newTask)
