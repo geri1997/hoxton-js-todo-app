@@ -259,8 +259,8 @@ function createTagCheckboxes(){
             
             if(tagInputCheckbox.checked){
                 state.selectedTags.push(tag)
-                for(let selectedTag of state.selectedTags){
-                    for(let todo of state.todos){
+                for(let todo of state.todos){
+                    for(let selectedTag of state.selectedTags){
                         if(todo.tags.includes(selectedTag)){
                             createToDoItem(todo)
                             break;
