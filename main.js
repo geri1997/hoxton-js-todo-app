@@ -3,21 +3,22 @@ const state = {
     {
         name:'Go Shopping',
         completed:true,
-        tags:['Chores']
+        tags:['chores']
     },
     {
         name:'Go to the Doctor',
         completed:false,
-        tags:['Health']
+        tags:['health']
     },
     {
         name:'Go for a run',
         completed:false,
-        tags:['Health','Exercise']
+        tags:['health','exercise']
     }
     ],
     showCompleted : true,
-    selectedTags:[]
+    selectedTags:[],
+    allTags:[]
 }
 
 //test
@@ -25,6 +26,8 @@ const state = {
 const formEl = document.querySelector('form')
 const tagInput = document.querySelector('input[class="text-input tag"]')
 
+let tagsCheckboxesDiv = document.createElement('div')
+document.querySelector('.options-section').append(tagsCheckboxesDiv)
 function createToDoItem(obj){
     //Create <li>
     const todoLiEL = document.createElement('li')
@@ -144,7 +147,10 @@ function deleteItem(text,item){
     state.todos = state.todos.filter((todo)=>{
         return todo.name !== text
     })
-    item.remove()
+    
+
+    render()
+    // item.remove()
 }
 
 function hideShowCompletedSection(){
@@ -179,7 +185,9 @@ function addNewTask(){
         for(let item of splitArray){
             tagsArray.push(item)
         }
-        
+        for(let tag of tagsArray){
+                state.allTags.push(tag)
+        }
         const newTask = {
             name:document.querySelector('input[type="text"]').value,
             completed:false,
@@ -189,7 +197,7 @@ function addNewTask(){
         state.todos.push(newTask)
             formEl.reset()
 
-            createToDoItem(newTask)
+            render()
         }
     )
 }
@@ -218,13 +226,62 @@ function searchTasks(){
 function render(){
     document.querySelector('ul.todo-list').innerHTML=''
     document.querySelector('ul.completed-list').innerHTML=''
-
+    state.allTags = []
+    
     for(const todo of state.todos){
-        createToDoItem(todo)
+        
+                createToDoItem(todo)
+                
+        state.allTags.push(...todo.tags)
     }
+    createTagCheckboxes()
     
 }
 render()
 addNewTask()
 hideShowCompletedSection()
 searchTasks()
+
+function createTagCheckboxes(){
+//Create checkboxes for tags
+    document.querySelector('.tag-checkbox-div').innerHTML = ''
+    let filteredArrayDuplicateTags = state.allTags.filter(function(tag,index){
+        return state.allTags.indexOf(tag)===index
+    })
+    for(let tag of filteredArrayDuplicateTags){
+        let tagInputCheckbox = document.createElement('input')
+        tagInputCheckbox.setAttribute('type','checkbox')
+
+        document.querySelector('.tag-checkbox-div').append(tag,tagInputCheckbox)
+        tagInputCheckbox.addEventListener('click',(e)=>{
+            document.querySelector('ul.todo-list').innerHTML=''
+            document.querySelector('ul.completed-list').innerHTML=''
+            
+            if(tagInputCheckbox.checked){
+                state.selectedTags.push(tag)
+                for(let selectedTag of state.selectedTags){
+                    for(let todo of state.todos){
+                        if(todo.tags.includes(selectedTag)){
+                            createToDoItem(todo)
+                            break;
+                        }
+                    }
+                }
+            }else{
+                state.selectedTags.splice(state.selectedTags.indexOf(tag),1)
+                for(let selectedTag of state.selectedTags){
+                    for(let todo of state.todos){
+                        if(todo.tags.includes(selectedTag)){
+                            createToDoItem(todo)
+                            break;
+                        }
+                    }
+                }
+            }
+            if(state.selectedTags.length===0){
+                render()
+            }
+        })
+        
+    }
+    }
