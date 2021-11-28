@@ -202,9 +202,9 @@ function addNewTask(){
         for(let item of splitArray){
             tagsArray.push(item)
         }
-        for(let tag of tagsArray){
-                state.allTags.push(tag)
-        }
+        // for(let tag of tagsArray){
+        //         state.allTags.push(tag)
+        // }
         const newTask = {
             name:document.querySelector('input[type="text"]').value,
             completed:false,
@@ -213,11 +213,10 @@ function addNewTask(){
                     }
                     
         state.todos.push(newTask)
-            formEl.reset()
+        formEl.reset()
 
-            render()
-        }
-    )
+        render()
+    })
 }
 
 //Filter tasks by search
@@ -228,58 +227,89 @@ function searchTasks(){
         e.preventDefault()
     })
     searchInput.addEventListener('input',(e)=>{
-        const filteredArrayBySearch = state.todos.filter(function (todo){
-            return todo.name.toLowerCase().includes(searchInput.value.toLowerCase())
-        })
+        // const filteredArrayBySearch = state.todos.filter(function (todo){
+        //     return todo.name.toLowerCase().includes(searchInput.value.toLowerCase())
+        // })
         render()
         
-        document.querySelector('ul.todo-list').innerHTML=''
-        document.querySelector('ul.completed-list').innerHTML=''
+        // document.querySelector('ul.todo-list').innerHTML=''
+        // document.querySelector('ul.completed-list').innerHTML=''
         
-        for(let todo of filteredArrayBySearch){
-            createToDoItem(todo)
-        }
+        // for(let todo of filteredArrayBySearch){
+        //     createToDoItem(todo)
+        // }
         // renderTagFilteredTasks()
     })
 }
 
-
+render()
 function render(){
     document.querySelector('ul.todo-list').innerHTML=''
     document.querySelector('ul.completed-list').innerHTML=''
+    let searchInput = document.querySelector('input[type="search"]')
     state.allTags = []
-    state.selectedTags = []
-    
-    for(const todo of state.todos){
+    // state.selectedTags = []
+    let filteredTodos = state.todos.filter((todo)=>{
+        if(state.selectedTags.length ===0){
+            return true
+        }
+        for(let selectedTag of state.selectedTags){
+            if(todo.tags.includes(selectedTag)){
+                return true
+            }
+        }
+        return false
+    }).filter((todo)=>{
+        if(state.selectedUser.length===0||state.selectedUser==='All'){
+            return true
+        }
+            return todo.user===state.selectedUser
+    }).filter((todo)=>{
+        return todo.name.toLowerCase().includes(searchInput.value.toLowerCase())
+    })
+    for(const todo of filteredTodos){
         
                 createToDoItem(todo)
                 
-        state.allTags.push(...todo.tags)
+        
     }
-    state.allTags = state.allTags.map((tag)=>{
-        return tag.toLowerCase()
-    })
+    updateUserList()
+    fillAllTags()
     createTagCheckboxes()
     renderUserOptions()
     
 }
-render()
+
+function fillAllTags(){
+    for(const todo of state.todos){
+        state.allTags.push(...todo.tags)
+    }
+    
+    state.allTags = state.allTags.map((tag)=>{
+        return tag.toLowerCase()
+    }).filter(function(tag,index){
+        return state.allTags.indexOf(tag)===index
+    })
+}
+
 addNewTask()
 hideShowCompletedSection()
 searchTasks()
 
 function renderTagFilteredTasks(){
-    if (state.selectedTags.length===0){
-        render() 
-    }
-    for(let todo of state.todos){
-        for(let selectedTag of state.selectedTags){
-            if(todo.tags.includes(selectedTag)){
-                createToDoItem(todo)
-                break;
-            }
-        }
-    }
+    // if (state.selectedTags.length===0){
+    //     render() 
+    // }
+    render()
+    
+    // for(let todo of state.todos){
+    //     for(let selectedTag of state.selectedTags){
+    //         if(todo.tags.includes(selectedTag)){
+    //             createToDoItem(todo)
+    //             break;
+    //         }
+    //     }
+    // }
 }
 
 function createTagCheckboxes(){
@@ -291,7 +321,9 @@ function createTagCheckboxes(){
     for(let tag of filteredArrayDuplicateTags){
         let tagInputCheckbox = document.createElement('input')
         tagInputCheckbox.setAttribute('type','checkbox')
-
+        if(state.selectedTags.includes(tag)){
+            tagInputCheckbox.checked= true
+        }
         document.querySelector('.tag-checkbox-div').append(tag,tagInputCheckbox)
         tagInputCheckbox.addEventListener('click',(e)=>{
             document.querySelector('input[type="search"]').value = ''
@@ -313,31 +345,54 @@ function createTagCheckboxes(){
     }
 
 
+    function updateUserList(){
+        let selectUser = document.querySelector('select')
+        // state.selectedUser=''
+        // selectUser.innerHTML = state.selectedUser
+        
+        selectUser.innerHTML = ''
+        let defaultOption = document.createElement('option')
+        defaultOption.textContent = 'All'
+        
+        selectUser.append(defaultOption)
+        for(let todo of state.todos){
+            const userOption = document.createElement('option')
+            userOption.setAttribute('value',todo.user)
+            userOption.textContent = todo.user
+            selectUser.append(userOption)
+            if(userOption.textContent===state.selectedUser){
+                userOption.selected=true
+            }
+        }
+
+    }
+
   function renderUserOptions(){
     let selectUser = document.querySelector('select')
-    state.selectedUser=''
-    selectUser.innerHTML = state.selectedUser
-    let defaultOption = document.createElement('option')
-    defaultOption.textContent = 'All'
-    selectUser.append(defaultOption)
-    for(let todo of state.todos){
-        const userOption = document.createElement('option')
-        userOption.setAttribute('value',todo.user)
-        userOption.textContent = todo.user
-        selectUser.append(userOption)
+    // // state.selectedUser=''
+    // selectUser.innerHTML = state.selectedUser
+    // let defaultOption = document.createElement('option')
+    // defaultOption.textContent = 'All'
+    // selectUser.append(defaultOption)
+    // for(let todo of state.todos){
+    //     const userOption = document.createElement('option')
+    //     userOption.setAttribute('value',todo.user)
+    //     userOption.textContent = todo.user
+    //     selectUser.append(userOption)
         
-    }
+    // }
     selectUser.addEventListener('change',(e)=>{
         document.querySelector('ul.todo-list').innerHTML=''
         document.querySelector('ul.completed-list').innerHTML=''
         state.selectedUser = selectUser.value
-        for(let todo of state.todos){
-            if(todo.user===state.selectedUser){
-                createToDoItem(todo)
-            }else if(state.selectedUser ==='All'||state.selectedUser ===''){
-                render()
-            }
-        }
+        render()
+        // for(let todo of state.todos){
+        //     if(todo.user===state.selectedUser){
+        //         createToDoItem(todo)
+        //     }else if(state.selectedUser ==='All'||state.selectedUser ===''){
+        //         render()
+        //     }
+        // }
             
     })
 
