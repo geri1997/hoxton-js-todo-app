@@ -227,6 +227,7 @@ function render(){
     document.querySelector('ul.todo-list').innerHTML=''
     document.querySelector('ul.completed-list').innerHTML=''
     state.allTags = []
+    state.selectedTags = []
     
     for(const todo of state.todos){
         
@@ -241,6 +242,20 @@ render()
 addNewTask()
 hideShowCompletedSection()
 searchTasks()
+
+function renderTagFilteredTasks(){
+    if (state.selectedTags.length===0){
+        render() 
+    }
+    for(let todo of state.todos){
+        for(let selectedTag of state.selectedTags){
+            if(todo.tags.includes(selectedTag)){
+                createToDoItem(todo)
+                break;
+            }
+        }
+    }
+}
 
 function createTagCheckboxes(){
 //Create checkboxes for tags
@@ -259,28 +274,13 @@ function createTagCheckboxes(){
             
             if(tagInputCheckbox.checked){
                 state.selectedTags.push(tag)
-                for(let todo of state.todos){
-                    for(let selectedTag of state.selectedTags){
-                        if(todo.tags.includes(selectedTag)){
-                            createToDoItem(todo)
-                            break;
-                        }
-                    }
-                }
+                renderTagFilteredTasks()
+                
             }else{
                 state.selectedTags.splice(state.selectedTags.indexOf(tag),1)
-                for(let todo of state.todos){
-                    for(let selectedTag of state.selectedTags){
-                        if(todo.tags.includes(selectedTag)){
-                            createToDoItem(todo)
-                            break;
-                        }
-                    }
-                }
+                renderTagFilteredTasks()
             }
-            if(state.selectedTags.length===0){
-                render()
-            }
+            
         })
         
     }
