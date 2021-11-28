@@ -126,10 +126,12 @@ function createToDoItem(obj){
         function saveEdit(){
             obj.name = paragraphElThatContainsTodo.textContent= editInputEl.value
             hideTooltip()
+            render()
         }
         const editInputEl = document.createElement('input')
         editInputEl.onfocus=displayTooltip
         editInputEl.onblur =saveEdit
+        
     //Displays input box instead of text when click on edit button
         editButtonEl.addEventListener('click',(e)=>{
         // obj.name = paragraphElThatContainsTodo.textContent = prompt('Enter new title for todo')
@@ -146,8 +148,7 @@ function createToDoItem(obj){
         editInputEl.addEventListener('keydown', (e)=>{
             
             if(e.key==='Enter'){
-                obj.name = editInputEl.value
-                paragraphElThatContainsTodo.textContent = obj.name
+                saveEdit()
             }
         })
     }
