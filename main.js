@@ -3,17 +3,20 @@ const state = {
     {
         name:'Go Shopping',
         completed:true,
-        tags:['chores']
+        tags:['chores'],
+        user: 'geri'
     },
     {
         name:'Go to the Doctor',
         completed:false,
-        tags:['health']
+        tags:['health'],
+        user:'nico'
     },
     {
         name:'Go for a run',
         completed:false,
-        tags:['health','exercise']
+        tags:['health','exercise'],
+        user:"ed"
     }
     ],
     showCompleted : true,
@@ -74,6 +77,14 @@ function createToDoItem(obj){
         
         todoTagSection.textContent += `${tag}\n`
     }
+
+    //Create user section
+    const todoUserSection = document.createElement('p')
+    todoUserSection.setAttribute('class','todo-tags')
+    todoUserSection.style.fontSize= '0.8rem'
+    todoUserSection.style.padding = '0rem 1rem'
+    todoUserSection.textContent = `User: ${obj.user}`
+
     //Append Stuff
     if(!obj.completed){
         document.querySelector('ul.todo-list').append(todoLiEL)
@@ -81,7 +92,7 @@ function createToDoItem(obj){
     }else{
         document.querySelector('ul.completed-list').append(todoLiEL)
     }
-    todoLiEL.append(todoDivCompletedCheckbox,textSectionDiv,buttonSectionDivEl,todoTagSection)
+    todoLiEL.append(todoDivCompletedCheckbox,textSectionDiv,buttonSectionDivEl,todoTagSection,todoUserSection)
         todoDivCompletedCheckbox.append(isCompletedCheckboxEl)
         textSectionDiv.append(paragraphElThatContainsTodo)
         buttonSectionDivEl.append(editButtonEl,deleteButtonEl)
@@ -235,6 +246,9 @@ function render(){
                 
         state.allTags.push(...todo.tags)
     }
+    state.allTags = state.allTags.map((tag)=>{
+        return tag.toLowerCase()
+    })
     createTagCheckboxes()
     
 }
