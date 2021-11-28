@@ -21,7 +21,8 @@ const state = {
     ],
     showCompleted : true,
     selectedTags:[],
-    allTags:[]
+    allTags:[],
+    selectedUser:''
 }
 
 //test
@@ -35,6 +36,7 @@ function createToDoItem(obj){
     //Create <li>
     const todoLiEL = document.createElement('li')
     obj.completed?todoLiEL.setAttribute('class','todo completed'):todoLiEL.setAttribute('class','todo')
+    
     //Create div
     const todoDivCompletedCheckbox = document.createElement('div')
     todoDivCompletedCheckbox.setAttribute('class','completed-section')
@@ -44,6 +46,8 @@ function createToDoItem(obj){
     isCompletedCheckboxEl.setAttribute('class','completed-checkbox')
     //If todo is completed, make the checkbox checked
     isCompletedCheckboxEl.checked=obj.completed
+    //Create select user options
+    
     //Create Text section div
     const textSectionDiv = document.createElement('div')
     textSectionDiv.setAttribute('class','text-section')
@@ -77,6 +81,7 @@ function createToDoItem(obj){
         
         todoTagSection.textContent += `${tag}\n`
     }
+
 
     //Create user section
     const todoUserSection = document.createElement('p')
@@ -255,6 +260,7 @@ function render(){
         return tag.toLowerCase()
     })
     createTagCheckboxes()
+    renderUserOptions()
     
 }
 render()
@@ -305,3 +311,46 @@ function createTagCheckboxes(){
         
     }
     }
+
+
+  function renderUserOptions(){
+    let selectUser = document.querySelector('select')
+    state.selectedUser=''
+    selectUser.innerHTML = state.selectedUser
+    let defaultOption = document.createElement('option')
+    defaultOption.textContent = 'All'
+    selectUser.append(defaultOption)
+    for(let todo of state.todos){
+        const userOption = document.createElement('option')
+        userOption.setAttribute('value',todo.user)
+        userOption.textContent = todo.user
+        selectUser.append(userOption)
+        
+    }
+    selectUser.addEventListener('change',(e)=>{
+        document.querySelector('ul.todo-list').innerHTML=''
+        document.querySelector('ul.completed-list').innerHTML=''
+        state.selectedUser = selectUser.value
+        for(let todo of state.todos){
+            if(todo.user===state.selectedUser){
+                createToDoItem(todo)
+            }else if(state.selectedUser ==='All'||state.selectedUser ===''){
+                render()
+            }
+        }
+            
+    })
+
+}
+
+    // selectUser.addEventListener('change',(e)=>{
+    //     state.selectedUser = userOption.value
+    //     // for(let todo of state.todos){
+    //     //     if(state.selectedUser===todo.user){
+    //     //         createToDoItem(todo)
+    //     //     }
+    //     // }
+    // })}
+    // function sv(){
+    //     state.selectedUser = this.value
+    // }
