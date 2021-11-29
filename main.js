@@ -107,6 +107,7 @@ function createToDoItem(obj){
         isCompletedCheckboxEl.addEventListener('click',(e)=>{
             e.stopPropagation()
             obj.completed=!obj.completed
+            localStorage.setItem('Todos', JSON.stringify(state.todos))
             todoLiEL.remove()
             createToDoItem(obj)
             // render()
@@ -126,6 +127,7 @@ function createToDoItem(obj){
         function saveEdit(){
             obj.name = paragraphElThatContainsTodo.textContent= editInputEl.value
             hideTooltip()
+            localStorage.setItem('Todos', JSON.stringify(state.todos))
             render()
         }
         const editInputEl = document.createElement('input')
@@ -164,7 +166,7 @@ function deleteItem(text,item){
     state.todos = state.todos.filter((todo)=>{
         return todo.name !== text
     })
-    
+    localStorage.setItem('Todos', JSON.stringify(state.todos))
 
     render()
     // item.remove()
@@ -215,7 +217,7 @@ function addNewTask(){
                     
         state.todos.push(newTask)
         formEl.reset()
-
+        localStorage.setItem('Todos', JSON.stringify(state.todos))
         render()
     })
 }
@@ -245,11 +247,13 @@ function searchTasks(){
 
 render()
 function render(){
+    getTodosFromLocalStorage()
     document.querySelector('ul.todo-list').innerHTML=''
     document.querySelector('ul.completed-list').innerHTML=''
     let searchInput = document.querySelector('input[type="search"]')
     state.allTags = []
     // state.selectedTags = []
+    console.log(state.todos)
     let filteredTodos = state.todos.filter((todo)=>{
         if(state.selectedTags.length ===0){
             return true
@@ -269,9 +273,7 @@ function render(){
         return todo.name.toLowerCase().includes(searchInput.value.toLowerCase())
     })
     for(const todo of filteredTodos){
-        
-                createToDoItem(todo)
-                
+        createToDoItem(todo)
         
     }
     updateUserList()
@@ -292,6 +294,8 @@ function fillAllTags(){
         return state.allTags.indexOf(tag)===index
     })
 }
+
+
 
 addNewTask()
 hideShowCompletedSection()
@@ -410,3 +414,9 @@ function createTagCheckboxes(){
     // function sv(){
     //     state.selectedUser = this.value
     // }
+
+
+    function getTodosFromLocalStorage(){
+        if(localStorage.getItem('Todos')!==null)state.todos = JSON.parse(localStorage.getItem('Todos'))
+        console.log(state.todos)
+    }
