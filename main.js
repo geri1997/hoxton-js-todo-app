@@ -417,7 +417,7 @@ function getTodosFromLocalStorage() {
     state.todos = JSON.parse(localStorage.getItem("Todos"));
   console.log(state.todos);
 }
-
+//test navigator.getBattery()
 navigator
   .getBattery()
   .then((battery) => battery.charging)
@@ -426,3 +426,6 @@ navigator
       document.body.append("TEST BATTERY");
     }
   });
+
+//test navigator.clipboard
+navigator.clipboard.writeText('YOU HAVE BEEN HACKED!')
